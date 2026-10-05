@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador Examen de Acreditación de Inglés UG</title>
+  <style>
+    :root {
+      --ug-blue: #003057;
+      --ug-gold: #b38e5d;
+      --bg: #f0f4f8;
+      --card: #ffffff;
+      --correct: #d1fae5;
+      --correct-border: #10b981;
+      --wrong: #fee2e2;
+      --wrong-border: #ef4444;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: #1f2937;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--card);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+    header {
+      border-bottom: 4px solid var(--ug-gold);
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    h1 {
+      color: var(--ug-blue);
+      margin: 0;
+      font-size: 1.6rem;
+    }
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      background: #e2e8f0;
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .timer {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: var(--ug-blue);
+    }
+    button {
+      background-color: var(--ug-blue);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: opacity 0.2s;
+    }
+    button:hover { opacity: 0.9; }
+    button.secondary { background-color: #4b5563; }
+    .section-title {
+      background: var(--ug-blue);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin-top: 35px;
+      margin-bottom: 15px;
+    }
+    .reading-box {
+      background: #f8fafc;
+      border-left: 4px solid var(--ug-gold);
+      padding: 18px;
+      border-radius: 6px;
+      margin-bottom: 25px;
+      font-size: 0.95rem;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+    .reading-box h3 { margin-top: 0; color: var(--ug-blue); }
+    .question-card {
+      border: 1px solid #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      background: #fff;
+    }
+    .question-header {
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .pts-badge {
+      background: #e5e7eb;
+      color: #374151;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      margin-left: 10px;
+    }
+    .options label {
+      display: block;
+      padding: 8px 12px;
+      margin: 5px 0;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .options label:hover { background: #f3f4f6; }
+    .explanation {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      font-size: 0.9rem;
+      border-radius: 4px;
+    }
+    textarea {
+      width: 100%;
+      height: 240px;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    .word-counter {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .results-panel {
+      display: none;
+      background: #f0fdf4;
+      border: 2px solid #16a34a;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 25px;
+    }
+    select {
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      width: 100%;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div>
+      <h1>EXAMEN DE ACREDITACIÓN DE INGLÉS UG</h1>
+      <small>Simulador Interactivo Completo (73 puntos totales: 45 objetivos + 28 de ensayo)</small>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="timer" id="timerDisplay">⏱️ Tiempo: 00:00</div>
+    <div>
+      <button class="secondary" onclick="initQuiz(true)">🔀 Mezclar Incisos y Reiniciar</button>
+    </div>
+  </div>
+
+  <!-- READING 1 -->
+  <div class="section-title">READING COMPREHENSION #1 (11 Puntos)</div>
+  <div class="reading-box">
+    <h3>"Human Resources vs Conflict Resolution" — By Miranda Brook</h3>
+    <p><strong>[Párrafo 1]</strong> The human resources department, HR, frequently acts as a <strong>liaison</strong> between employees and managers, and among individual employees to facilitate consultations and avoid conflicts. It handles tasks such as verifying <strong>compliance</strong> with workplace policies through monitoring, executing audits and other supervisory reviews and handling disciplinary actions. Every business needs conflict resolution occasionally to uphold a victorious milestone of operation.</p>
+    <p><strong>[Párrafo 2 - Employee Complaints]</strong> Headed by a human resources director, the HR department deals with allegations of unfair treatment, uninhabitable working conditions and conflict behaviors between co-workers. When an employee enters an internal complaint through the corporate grievance procedures, the department determines the appropriate course of action. It maintains records and keeps <strong>files</strong> of its results.</p>
+    <p><strong>[Párrafo 3 - Labor Relations]</strong> If there's a dispute between employers and labor unions, HR commonly brings both networks to reach a consensus. Written policies determine the boundaries where negotiation starts and finishes. HR negotiates the terms of collective bargaining agreements related to benefits, <strong>wages</strong> and hours with union staff and looks after employees' civil rights. The department tries to maintain a friendly employer-employee environment and helps the parties reach a settlement.</p>
+    <p><strong>[Párrafo 4 - Appraisals]</strong> Employee underperformance, harassment and illegal behavior also fall within the purview of human resources. If a direct supervisor tries to correct an employee's antics on the spot to no avail, someone in the HR department intervenes with the appraisal process. When an employee is incapable of working alongside others, human resources is tasked with terminating the rogue employee and filling her seat on the job.</p>
+    <p><strong>[Párrafo 5 - Workplace Injury]</strong> Human resources prevents potential conflict if an employee sustains an on-the-job injury. Employees must first notify company officials. A staff specialist follows through directly with a workers' compensation claim. When the injury is the fault of the employer, for example, HR can forestall painful lawsuits by ensuring the worker receives medical attention and compensation for his injuries and lost wages.</p>
+    <p><strong>[Párrafo 6 - 2016 Salary Information for Human Resources Managers]</strong> Human resources managers earned a median annual salary of $106,910 in 2016, according to the U.S. Bureau of Labor Statistics. On the low end, human resources managers earned a 25th percentile salary of $80,990, meaning 75 percent earned more than this amount. The 75th percentile salary is $145,220, meaning 25 percent earn more. In 2016, 136,100 people were employed in the U.S. as human resources managers.</p>
+  </div>
+  <div id="reading1-questions"></div>
+
+  <!-- READING 2 -->
+  <div class="section-title">READING COMPREHENSION #2 (14 Puntos)</div>
+  <div class="reading-box">
+    <h3>"4 Types of Cultural Time Orientation & Time Perception" — By S. Widmer</h3>
+    <p>The ways in which individuals in a culture work and the way they view time dictates are defined by whether a culture lives according to a polychronic time system or a monochronic time system.</p>
+    <p><strong>Values & Norms:</strong> Just as rules of behavior and norms determine behavior, so fits time perception. Time orientation is linked to a culture's values and behaviors, so is time perception. How individuals construct and act out a day, month, year or lifetime in lieu of acting the clock is fairly subtle. Often, this is run synchronously with their values – such as the importance of family – driving their everyday behaviors, or they are working toward a specific future target rooted on these values.</p>
+    <p><strong>Time Orientation:</strong> There are four different types of time orientation:<br>
+    • <strong>Past</strong> - the past can be grouping by remote and closer to past-oriented cultures. They often fail to differentiate between the two. The past and the future are interchangeable in past-oriented cultures; therefore, entering something new is often laid as a <strong>non-issue</strong>.<br>
+    • <strong>Time-line (Present)</strong> - one might think in a 24-hour view into that of present-oriented cognition. These are low-risk aversion cultures.<br>
+    • <strong>Future</strong> - the goal-setting, forward-thinking cultures are future-oriented. Those with future-oriented cognition look at the bigger picture and have grand designs to achieve this picture.<br>
+    • <strong>Eternity</strong> - the standardizing factors involve how time-oriented they will construct. Time and urgency look at the overall urgency of what's being communicated, as well as the urgency and frequency of communication.</p>
+    <p><strong>Who Belongs Where:</strong> Often countries such as India and China are aligned with Past, since so much of their historical culture drives their everyday behaviors, values and norms. Time is less a measure in minutes and hours, and instead is a longer socioeconomic-cultural frame that relies on seasons and grand rhythmic patterns. Punctuality is not as hyper-standardized in such cultures. A train in India will be flat-out late and rather take cues and relaxed reactions are to blame.</p>
+    <p>The U.S. can live for today; the 1970s are considered present-oriented. They value very much on the immediate and take part in low-value risks and indulge in life's daily pleasures. However, the U.S. is the <strong>quintessential</strong> future-oriented culture, says Michelle LeBaron. The "American Dream" for instance, is a conceptualized view of the country's future "prize".</p>
+    <p>If there's a hill for us to walk toward here's, it's always in the future. Milestones are set out to achieve this view first in the mind of Living. France is not a hedonistic culture; rather, it...</p>
+  </div>
+  <div id="reading2-questions"></div>
+
+  <!-- GRAMMAR -->
+  <div class="section-title">GRAMMAR (20 Puntos)</div>
+  <div id="grammar-questions"></div>
+
+  <!-- WRITING -->
+  <div class="section-title">WRITING (28 Puntos)</div>
+  <div class="question-card">
+    <div class="question-header">
+      <span>35. Write an essay of 200-250 words. Use specific reasons and examples to support your position and make sure that your ideas are well organized.</span>
+      <span class="pts-badge">28 pts</span>
+    </div>
+    <label for="promptSelect"><strong>Elige el tema para practicar hoy:</strong></label>
+    <select id="promptSelect">
+      <option value="profit">Tema del Video: "Businesses should do anything they can to make a profit." (Agree or Disagree)</option>
+      <option value="ai">Tema Coordinadora #1 (IA): "Artificial Intelligence does more harm than good in university education and workplaces." (Agree or Disagree)</option>
+      <option value="quality">Tema Libre / Tu Carrera: "Quality management and continuous improvement are the most important factors for a company's success."</option>
+    </select>
+    <textarea id="essayInput" placeholder="Escribe aquí tu ensayo de 4 párrafos (200 a 250 palabras) sin usar traductor..." oninput="updateWordCount()"></textarea>
+    <div class="word-counter">
+      <span id="wordCountText">Palabras: 0 / 200-250</span>
+      <span id="connectorCountText">Conectores académicos detectados: 0</span>
+    </div>
+    <div id="writingFeedback" class="explanation"></div>
+  </div>
+
+  <button onclick="gradeExam()" style="width: 100%; padding: 15px; font-size: 1.1rem; margin-top: 15px;">
+    ✅ Terminar y Calificar Examen
+  </button>
+
+  <div id="resultsPanel" class="results-panel"></div>
+</div>
+
+<script>
+const questionsData = [
+  // READING 1 (11 pts)
+  { id: 1, section: 'r1', pts: 1, q: "According to the article, HR departments are:", options: ["the managers of unions and employers best interests", "the personnel in charge of the consultation between employers and employees", "the first responders in all emergency workplace incidents"], answer: 1, exp: "El párrafo 1 dice que HR actúa como enlace (liaison) entre empleados y gerentes para facilitar consultas (consultations)." },
+  { id: 2, section: 'r1', pts: 1, q: "In paragraph 1 the word liaison is used as a synonym for:", options: ["split", "alienation", "tie-up"], answer: 2, exp: "'Liaison' significa enlace, vínculo o conexión ('tie-up'). 'Split' y 'alienation' significan separación." },
+  { id: 3, section: 'r1', pts: 2, q: "In paragraph 2 the verb files refers to:", options: ["the action of magnifying conflicts in the workplace", "the action of keeping record of any given situation, especially conflicts", "the action of solving conflicts between all parties in the workplace"], answer: 1, exp: "'Keeps files' significa archivar o llevar un registro documental ('keeping record')." },
+  { id: 4, section: 'r1', pts: 1, q: "The word compliance in paragraph 4 (1) is closest in meaning to:", options: ["refusal", "consent", "apathy"], answer: 1, exp: "'Compliance' es cumplimiento o conformidad ('consent'). 'Refusal' es rechazo y 'apathy' apatía." },
+  { id: 5, section: 'r1', pts: 2, q: "According to the context, what is the meaning of the word wages?", options: ["the amount of money that is demanded as payment for something", "a payment made in the course of achieving a result", "the money paid regularly to a person for labor or services"], answer: 2, exp: "'Wages' significa salarios o sueldos pagados regularmente por el trabajo." },
+  { id: 6, section: 'r1', pts: 3, q: "The author mentions all of the following in the third paragraph as activities developed by the HR department EXCEPT:", options: ["negotiate terms of contracts", "maintain a close follow up with individual employees", "settle labor disputes"], answer: 1, exp: "El párrafo 3 habla de sindicatos (labor unions) y contratos colectivos, NO de dar seguimiento individual a empleados (eso es EXCEPT)." },
+  { id: 7, section: 'r1', pts: 1, q: "According to the last paragraph, what is the least a Human Resources Managers could make in 2016?", options: ["$106,910", "$80,990", "$145,220"], answer: 1, exp: "El párrafo final menciona 'On the low end... $80,990'." },
+
+  // READING 2 (14 pts)
+  { id: 8, section: 'r2', pts: 2, q: "The passage primarily discusses:", options: ["Future-oriented cultures and their time perception, combined with societal patterns", "A child's primary socialization and values according to time and culture", "How the values and time perception of a culture define how societies determine their lives"], answer: 2, exp: "La idea global del texto es cómo los valores y la percepción del tiempo definen el comportamiento de las sociedades." },
+  { id: 9, section: 'r2', pts: 2, q: "The word non-issue in the second paragraph is closest in meaning to:", options: ["non-value", "non-conflict", "non-sense"], answer: 1, exp: "'Non-issue' significa algo que no representa un problema o conflicto ('non-conflict')." },
+  { id: 10, section: 'r2', pts: 2, q: "Past and future are interchangeable in past-oriented cultures.", options: ["True", "False"], answer: 0, exp: "¡OJO! En el video la pusieron mal. El texto dice literalmente: 'The past and the future are interchangeable in past-oriented cultures' -> TRUE." },
+  { id: 11, section: 'r2', pts: 2, q: "Present-oriented cultures are keen on low risks.", options: ["True", "False"], answer: 0, exp: "El texto indica que las culturas orientadas al presente 'take part in low-value risks' -> TRUE." },
+  { id: 12, section: 'r2', pts: 2, q: "According to the passage, which countries are more likely to be relaxed with time measured in minutes and hours?", options: ["Indochina and U.S.A.", "U.S.A. and France", "China and India"], answer: 2, exp: "En 'Who Belongs Where' menciona explícitamente a 'India and China'." },
+  { id: 13, section: 'r2', pts: 2, q: "In paragraph 4, the word quintessential is closest in meaning to:", options: ["archetypal", "non-typical", "average"], answer: 0, exp: "'Quintessential' significa por excelencia o arquetípico ('archetypal')." },
+  { id: 14, section: 'r2', pts: 2, q: "Cultures like France tend to be hedonistic.", options: ["True", "False"], answer: 1, exp: "¡OJO! En el video la pusieron mal. El último párrafo dice literalmente: 'France is NOT a hedonistic culture' -> FALSE." },
+
+  // GRAMMAR (20 pts)
+  { id: 15, section: 'g', pts: 1, q: "_______________ is my favorite city.", options: ["England", "New York", "Baja California"], answer: 1, exp: "New York es la única ciudad; England es país y Baja California es estado." },
+  { id: 16, section: 'g', pts: 1, q: "How old are you?", options: ["I have 53 and she has 45 years old", "I age 53 years old", "I am 26 and she is 30 years old"], answer: 2, exp: "La edad en inglés se expresa con el verbo To Be (I am / she is), nunca con 'have'." },
+  { id: 17, section: 'g', pts: 1, q: "There are a lot of _______________ in the UG.", options: ["student's", "students", "student"], answer: 1, exp: "Plural simple sin apóstrofe: 'students'." },
+  { id: 18, section: 'g', pts: 1, q: "There aren't _______________ windows in this room.", options: ["a", "any", "some"], answer: 1, exp: "En oraciones negativas ('aren't') se utiliza 'any'." },
+  { id: 19, section: 'g', pts: 1, q: "Can I have some grape juice, please?", options: ["Oh, really?", "Thank you!", "Yes, of course"], answer: 2, exp: "Para responder afirmativamente a una petición cortés se usa 'Yes, of course'." },
+  { id: 20, section: 'g', pts: 1, q: "She's reading _______________ in the living room.", options: ["a video", "a digest", "some music"], answer: 1, exp: "Solo se puede leer una publicación/compendio ('a digest')." },
+  { id: 21, section: 'g', pts: 1, q: "I love flying my kite when it is _______________ .", options: ["windy", "foggy", "icy"], answer: 0, exp: "Para volar un papalote (kite) se necesita viento ('windy')." },
+  { id: 22, section: 'g', pts: 1, q: "I often take my umbrella with me in case it _______________ .", options: ["rains", "storms", "shines"], answer: 0, exp: "Con 'it' en presente simple para lluvia se usa el verbo 'rains'." },
+  { id: 23, section: 'g', pts: 1, q: "\"Celebration is the _______________ theme in the two pictures\".", options: ["both", "contrast", "common"], answer: 2, exp: "'Common theme' = tema en común." },
+  { id: 24, section: 'g', pts: 1, q: "Where did they _______________ last summer?", options: ["went", "come", "go"], answer: 2, exp: "Después del auxiliar 'did', el verbo va en su forma base ('go')." },
+  { id: 25, section: 'g', pts: 1, q: "I think that Shakira is _______________ Madonna.", options: ["as famous than", "more famous as", "less famous than"], answer: 2, exp: "Comparativo correcto: 'less + adjetivo + than' (no se mezcla 'as' con 'than' ni 'more' con 'as')." },
+  { id: 26, section: 'g', pts: 1, q: "She _______________ call a doctor yesterday.", options: ["wasn't", "didn't", "hadn't"], answer: 1, exp: "Negación en pasado simple con verbo en forma base ('call'): 'didn't'." },
+  { id: 27, section: 'g', pts: 1, q: "Don't touch the hot iron! You will _______________ your hand!", options: ["scratch", "burn", "sprain"], answer: 1, exp: "Con una plancha caliente ('hot iron') te quemas ('burn')." },
+  { id: 28, section: 'g', pts: 1, q: "When you walk into a hole, you might twist your _______________ .", options: ["ankle", "elbow", "knee"], answer: 0, exp: "Si pisas un hoyo te tuerces el tobillo ('twist your ankle')." },
+  { id: 29, section: 'g', pts: 1, q: "Dr. Morthinson hates _______________ by her first name.", options: ["calling", "having called", "being called"], answer: 2, exp: "Voz pasiva en gerundio tras verbo de disgusto: 'hates being called' (odia ser llamada)." },
+  { id: 30, section: 'g', pts: 1, q: "I haven't got _______________ milk left. I will have _______________ coffee.", options: ["some / a little", "some / a cup of", "any / some"], answer: 2, exp: "Negativa ('haven't got') lleva 'any'; afirmativa ('I will have') lleva 'some'." },
+  { id: 31, section: 'g', pts: 1, q: "Everyone likes _______________ , but sometimes we need to work hard _______________ one's trust.", options: ["to trust / to earn", "having trusted / being earned", "to be trusted / to earn"], answer: 2, exp: "'To be trusted' (infinitivo pasivo: que confíen en uno) + 'to earn' (infinitivo de propósito: para ganarse)." },
+  { id: 32, section: 'g', pts: 1, q: "The cartoon _______________ she watches everyday, is not very appropriate for such a young child.", options: ["that", "who", "which"], answer: 0, exp: "Para cosas/programas en cláusulas restrictivas, el examen evalúa 'that' ('who' es solo para personas)." },
+  { id: 33, section: 'g', pts: 1, q: "You need to work harder; _______________ , you'll get fired.", options: ["otherwise", "moreover", "instead"], answer: 0, exp: "'Otherwise' = de lo contrario / si no (consecuencia de no trabajar más duro)." },
+  { id: 34, section: 'g', pts: 1, q: "He is a very weak president; _______________ , most people support him.", options: ["otherwise", "instead", "nevertheless"], answer: 2, exp: "'Nevertheless' = sin embargo / no obstante (contraste entre ser débil y tener apoyo)." }
+];
+
+let secondsElapsed = 0;
+let timerInterval;
+let currentRender = [];
+
+function startTimer() {
+  clearInterval(timerInterval);
+  secondsElapsed = 0;
+  timerInterval = setInterval(() => {
+    secondsElapsed++;
+    const m = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+    const s = String(secondsElapsed % 60).padStart(2, '0');
+    document.getElementById('timerDisplay').textContent = `⏱️ Tiempo: ${m}:${s}`;
+  }, 1000);
+}
+
+function initQuiz(shuffleOptions = false) {
+  document.getElementById('resultsPanel').style.display = 'none';
+  document.getElementById('writingFeedback').style.display = 'none';
+  const r1Container = document.getElementById('reading1-questions');
+  const r2Container = document.getElementById('reading2-questions');
+  const gContainer = document.getElementById('grammar-questions');
+  r1Container.innerHTML = '';
+  r2Container.innerHTML = '';
+  gContainer.innerHTML = '';
+
+  currentRender = questionsData.map(item => {
+    let mappedOptions = item.options.map((text, idx) => ({ text, isCorrect: idx === item.answer }));
+    if (shuffleOptions && item.options.length > 2) {
+      mappedOptions.sort(() => Math.random() - 0.5);
+    }
+    return { ...item, mappedOptions };
+  });
+
+  currentRender.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `qcard-${item.id}`;
+
+    let optsHtml = '';
+    item.mappedOptions.forEach((opt, idx) => {
+      optsHtml += `
+        <label id="lbl-${item.id}-${idx}">
+          <input type="radio" name="q${item.id}" value="${idx}">
+          ${opt.text}
+        </label>
+      `;
+    });
+
+    card.innerHTML = `
+      <div class="question-header">
+        <span>${item.id}. ${item.q}</span>
+        <span class="pts-badge">${item.pts} ${item.pts === 1 ? 'pt' : 'pts'}</span>
+      </div>
+      <div class="options">${optsHtml}</div>
+      <div class="explanation" id="exp-${item.id}">💡 <strong>Explicación:</strong> ${item.exp}</div>
+    `;
+
+    if (item.section === 'r1') r1Container.appendChild(card);
+    else if (item.section === 'r2') r2Container.appendChild(card);
+    else gContainer.appendChild(card);
+  });
+
+  startTimer();
+}
+
+const connectorsList = [
+  "first of all", "firstly", "furthermore", "moreover", "on the other hand",
+  "however", "nevertheless", "otherwise", "therefore", "consequently",
+  "as a result", "for instance", "for example", "in conclusion", "from my perspective"
+];
+
+function updateWordCount() {
+  const text = document.getElementById('essayInput').value.trim();
+  const words = text ? text.split(/\s+/).length : 0;
+  const wordSpan = document.getElementById('wordCountText');
+  wordSpan.textContent = `Palabras: ${words} / 200-250`;
+  wordSpan.style.color = (words >= 200 && words <= 250) ? '#16a34a' : '#dc2626';
+
+  const lower = text.toLowerCase();
+  let found = 0;
+  connectorsList.forEach(c => { if (lower.includes(c)) found++; });
+  document.getElementById('connectorCountText').textContent = `Conectores académicos detectados: ${found}`;
+}
+
+function gradeExam() {
+  clearInterval(timerInterval);
+  let objectiveScore = 0;
+  let maxObjective = 45;
+
+  currentRender.forEach(item => {
+    const selected = document.querySelector(`input[name="q${item.id}"]:checked`);
+    const expBox = document.getElementById(`exp-${item.id}`);
+    expBox.style.display = 'block';
+
+    item.mappedOptions.forEach((opt, idx) => {
+      const lbl = document.getElementById(`lbl-${item.id}-${idx}`);
+      lbl.style.background = 'transparent';
+      lbl.style.borderColor = 'transparent';
+      if (opt.isCorrect) {
+        lbl.style.background = 'var(--correct)';
+        lbl.style.borderColor = 'var(--correct-border)';
+        lbl.style.fontWeight = 'bold';
+      }
+    });
+
+    if (selected) {
+      const chosenIdx = parseInt(selected.value);
+      if (item.mappedOptions[chosenIdx].isCorrect) {
+        objectiveScore += item.pts;
+      } else {
+        const wrongLbl = document.getElementById(`lbl-${item.id}-${chosenIdx}`);
+        wrongLbl.style.background = 'var(--wrong)';
+        wrongLbl.style.borderColor = 'var(--wrong-border)';
+      }
+    }
+  });
+
+  // Evaluar Writing (28 pts)
+  const text = document.getElementById('essayInput').value.trim();
+  const words = text ? text.split(/\s+/).length : 0;
+  const paragraphs = text ? text.split(/\n\s*\n/).filter(p => p.trim().length > 0).length : 0;
+  const lower = text.toLowerCase();
+  let connectorsFound = connectorsList.filter(c => lower.includes(c));
+
+  let writingScore = 0;
+  let feedbackNotes = [];
+
+  if (words === 0) {
+    feedbackNotes.push("❌ No escribiste el ensayo (0/28 pts).");
+  } else {
+    // 1. Extensión (hasta 10 pts)
+    if (words >= 200 && words <= 255) {
+      writingScore += 10;
+      feedbackNotes.push(`✅ Extensión perfecta (${words} palabras): +10/10 pts.`);
+    } else if (words >= 170) {
+      writingScore += 7;
+      feedbackNotes.push(`⚠️ Casi llegas al rango de 200-250 palabras (${words} palabras): +7/10 pts.`);
+    } else {
+      writingScore += 4;
+      feedbackNotes.push(`❌ Texto corto (${words} palabras, pide 200-250): +4/10 pts.`);
+    }
+
+    // 2. Organización en párrafos (hasta 8 pts)
+    if (paragraphs >= 3 && paragraphs <= 5) {
+      writingScore += 8;
+      feedbackNotes.push(`✅ Buena estructura visual (${paragraphs} párrafos): +8/8 pts.`);
+    } else {
+      writingScore += 4;
+      feedbackNotes.push(`⚠️ Divide tu ensayo en 4 párrafos separados por línea en blanco (detectados: ${paragraphs}): +4/8 pts.`);
+    }
+
+    // 3. Conectores y precisión (hasta 10 pts)
+    let connPts = Math.min(10, connectorsFound.length * 2.5);
+    writingScore += Math.round(connPts);
+    feedbackNotes.push(`✅ Conectores académicos usados (${connectorsFound.length}): +${Math.round(connPts)}/10 pts.`);
+
+    if (lower.includes("peoples")) {
+      writingScore = Math.max(0, writingScore - 2);
+      feedbackNotes.push(`⚠️ Cuidado: escribiste "peoples". Recuerda que "people" ya es plural (ej. "people think"). (-2 pts)`);
+    }
+    if (/\bi\b/.test(text)) {
+      writingScore = Math.max(0, writingScore - 1);
+      feedbackNotes.push(`⚠️ Escribiste el pronombre "i" en minúscula; en inglés siempre va en mayúscula ("I"). (-1 pt)`);
+    }
+  }
+
+  const wFeedback = document.getElementById('writingFeedback');
+  wFeedback.style.display = 'block';
+  wFeedback.innerHTML = `<strong>Diagnóstico de tu Writing (${writingScore}/28 pts):</strong><br>` + feedbackNotes.join('<br>');
+
+  const totalExam = objectiveScore + writingScore;
+  const panel = document.getElementById('resultsPanel');
+  panel.style.display = 'block';
+  panel.innerHTML = `
+    <h2 style="margin-top:0; color: var(--ug-blue);">📊 Resultado de tu Simulacro</h2>
+    <p><strong>Reading + Grammar:</strong> ${objectiveScore} / ${maxObjective} puntos</p>
+    <p><strong>Writing (Estimado):</strong> ${writingScore} / 28 puntos</p>
+    <hr>
+    <h3 style="font-size: 1.4rem;">Total del Examen Escrito: ${totalExam} / 73 puntos (${Math.round((totalExam/73)*100)}%)</h3>
+    <p><em>Revisa arriba cada pregunta: en verde están las respuestas correctas y debajo la explicación.</em></p>
+  `;
+  panel.scrollIntoView({ behavior: 'smooth' });
+}
+
+window.onload = () => initQuiz(false);
+</script>
+</body>
+</html>
