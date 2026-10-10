@@ -185,6 +185,7 @@
     <div class="timer" id="timerDisplay">⏱️ Tiempo: 00:00</div>
     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
       <button class="quick-copy" onclick="copyExactWriting(this)">📋 writing</button>
+      <button class="quick-copy" onclick="copyWriting2(this)">📋 writing 2</button>
       <button class="secondary" onclick="initQuiz(true)">🔀 Mezclar Incisos y Reiniciar</button>
     </div>
   </div>
@@ -464,6 +465,40 @@ Finally, I think that if we use artificial intelligence in a good way, checking 
       const manual = document.createElement('textarea');
       manual.value = exactText; manual.readOnly = true;
       manual.setAttribute('aria-label', 'Writing original para copiar');
+      status.appendChild(manual); manual.focus(); manual.select();
+    }
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(exactText).then(copied).catch(fallback);
+  else fallback();
+}
+
+function copyWriting2(btn) {
+  const exactText = `From my point of view, I think artificial intelligence is a benefit for work because it helps us, for example, to analyze data, reduce the time we spend doing research, make calculations, learn English and many more things. And now we can also use artificial intelligence to write code.
+It also helps us make presentations, but we always need to check the information because maybe this is the real problem, that we trust the results AI gives us without checking them. We think the information is correct and maybe this is the biggest mistake, because we really should not think that.
+For example, I use artificial intelligence at General Motors and in fact, the company encourages us to use it, but in a very responsible way, always checking the results. But for example, if someone makes a calculation about the number of vehicles and the calculation is wrong, there could be big financial losses. But in general, we have seen that we work much better when we check the results.
+In conclusion, I think artificial intelligence is a benefit for work, but we need to use it responsibly.`;
+
+  const status = document.getElementById('copyStatus');
+  const copied = () => {
+    const originalText = btn.textContent;
+    btn.textContent = "✅ ¡Copiado!";
+    status.textContent = 'Tu Writing 2 se copió completo.';
+    setTimeout(() => { btn.textContent = originalText; }, 1500);
+  };
+  const fallback = () => {
+    const area = document.createElement('textarea');
+    area.value = exactText;
+    area.style.position = 'fixed'; area.style.left = '-9999px';
+    document.body.appendChild(area); area.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (_) {}
+    area.remove();
+    if (ok) copied();
+    else {
+      status.textContent = 'El navegador bloqueó la copia automática. Selecciona y copia tu Writing aquí:';
+      const manual = document.createElement('textarea');
+      manual.value = exactText; manual.readOnly = true;
+      manual.setAttribute('aria-label', 'Writing 2 para copiar');
       status.appendChild(manual); manual.focus(); manual.select();
     }
   };
