@@ -184,18 +184,14 @@
   <div class="toolbar">
     <div class="timer" id="timerDisplay">⏱️ Tiempo: 00:00</div>
     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-      <button class="quick-copy" onclick="copyExactWriting(this)">📋 writing</button>
+      <button class="quick-copy" onclick="copyExactWriting()">📋 writing</button>
       <button class="secondary" onclick="initQuiz(true)">🔀 Mezclar Incisos y Reiniciar</button>
     </div>
   </div>
 
-  <label for="examSelect"><strong>Selecciona el examen:</strong></label>
-  <select id="examSelect" onchange="switchExam(this.value)"><option value="1">Examen 1 — Original</option><option value="2">Examen 2 — Video 2026</option></select>
-  <div id="sourceNotice" class="reading-box" hidden></div>
-  <p id="copyStatus" role="status" aria-live="polite"></p>
   <!-- READING 1 -->
   <div class="section-title">READING COMPREHENSION #1 (11 Puntos)</div>
-  <div class="reading-box" id="reading1Text">
+  <div class="reading-box">
     <h3>"Human Resources vs Conflict Resolution" — By Miranda Brook</h3>
     <p><strong>[Párrafo 1]</strong> The human resources department, HR, frequently acts as a <strong>liaison</strong> between employees and managers, and among individual employees to facilitate consultations and avoid conflicts. It handles tasks such as verifying <strong>compliance</strong> with workplace policies through monitoring, executing audits and other supervisory reviews and handling disciplinary actions. Every business needs conflict resolution occasionally to uphold a victorious milestone of operation.</p>
     <p><strong>[Párrafo 2 - Employee Complaints]</strong> Headed by a human resources director, the HR department deals with allegations of unfair treatment, uninhabitable working conditions and conflict behaviors between co-workers. When an employee enters an internal complaint through the corporate grievance procedures, the department determines the appropriate course of action. It maintains records and keeps <strong>files</strong> of its results.</p>
@@ -208,7 +204,7 @@
 
   <!-- READING 2 -->
   <div class="section-title">READING COMPREHENSION #2 (14 Puntos)</div>
-  <div class="reading-box" id="reading2Text">
+  <div class="reading-box">
     <h3>"4 Types of Cultural Time Orientation & Time Perception" — By S. Widmer</h3>
     <p>The ways in which individuals in a culture work and the way they view time dictates are defined by whether a culture lives according to a polychronic time system or a monochronic time system.</p>
     <p><strong>Values & Norms:</strong> Just as rules of behavior and norms determine behavior, so fits time perception. Time orientation is linked to a culture's values and behaviors, so is time perception. How individuals construct and act out a day, month, year or lifetime in lieu of acting the clock is fairly subtle. Often, this is run synchronously with their values – such as the importance of family – driving their everyday behaviors, or they are working toward a specific future target rooted on these values.</p>
@@ -231,7 +227,7 @@
   <div class="section-title">WRITING (28 Puntos)</div>
   <div class="question-card">
     <div class="question-header">
-      <span id="writingInstruction">35. Write an essay of 200-250 words. Use specific reasons and examples to support your position and make sure that your ideas are well organized.</span>
+      <span>35. Write an essay of 200-250 words. Use specific reasons and examples to support your position and make sure that your ideas are well organized.</span>
       <span class="pts-badge">28 pts</span>
     </div>
     <label for="promptSelect"><strong>Elige el tema para practicar hoy:</strong></label>
@@ -256,7 +252,7 @@
 </div>
 
 <script>
-const originalQuestionsData = [
+const questionsData = [
   // READING 1 (11 pts)
   { id: 1, section: 'r1', pts: 1, q: "According to the article, HR departments are:", options: ["the managers of unions and employers best interests", "the personnel in charge of the consultation between employers and employees", "the first responders in all emergency workplace incidents"], answer: 1, exp: "El párrafo 1 dice que HR actúa como enlace (liaison) entre empleados y gerentes para facilitar consultas (consultations)." },
   { id: 2, section: 'r1', pts: 1, q: "In paragraph 1 the word liaison is used as a synonym for:", options: ["split", "alienation", "tie-up"], answer: 2, exp: "'Liaison' significa enlace, vínculo o conexión ('tie-up'). 'Split' y 'alienation' significan separación." },
@@ -298,56 +294,6 @@ const originalQuestionsData = [
   { id: 34, section: 'g', pts: 1, q: "He is a very weak president; _______________ , most people support him.", options: ["otherwise", "instead", "nevertheless"], answer: 2, exp: "'Nevertheless' = sin embargo / no obstante (contraste entre ser débil y tener apoyo)." }
 ];
 
-
-const videoQuestionsData = [{"id": 1, "section": "r1", "pts": 1, "q": "What do Spaniards eat at midnight on New Year's Eve?", "options": ["grapes", "grapefruit", "strawberries"], "answer": 0, "exp": "El texto dice que comen doce uvas a medianoche."}, {"id": 2, "section": "r1", "pts": 1, "q": "How many grapes do they eat, and what do they represent?", "options": ["twelve and they represent money for each month of the year", "thirty and they represent good luck for each day of the month", "twelve and they represent good luck for each month of the new year"], "answer": 2, "exp": "Cada una de las doce uvas representa buena suerte para un mes."}, {"id": 3, "section": "r1", "pts": 1, "q": "Where does Shogatsu take place?", "options": ["Philipines", "Japan", "New York"], "answer": 1, "exp": "Shogatsu es el Año Nuevo en Japón. Se conserva la grafía de las opciones del video."}, {"id": 4, "section": "r1", "pts": 1, "q": "Why do Japanese families clean their homes before New Year?", "options": ["To welcome guests", "To welcome good fortune", "To welcome the New Year"], "answer": 1, "exp": "El texto dice: to welcome good fortune."}, {"id": 5, "section": "r1", "pts": 1, "q": "How many times are temple bells rung in Japan, and what does it symbolize?", "options": ["108 times; it symbolizes good luck for the year", "108 times; it marks the beginning of a new season", "108 times; it signifies spiritual cleansing"], "answer": 2, "exp": "Las 108 campanadas simbolizan la limpieza de los pecados según la creencia budista descrita."}, {"id": 6, "section": "r1", "pts": 1, "q": "What color do Brazilians traditionally wear on New Year's Eve, and why?", "options": ["White; it represents good luck and happiness", "White; it stands for growth and prosperity", "White; it symbolizes peace and purity"], "answer": 2, "exp": "El blanco simboliza paz y pureza en la lectura."}, {"id": 7, "section": "r1", "pts": 1, "q": "What do Brazilians do at the beach to bring luck?", "options": ["They eat twelve grapes, asking for something with each grape.", "They jump seven waves, making a wish with each jump.", "They jump eight obstacles, making a wish with each jump."], "answer": 1, "exp": "Saltan siete olas y piden un deseo en cada salto."}, {"id": 8, "section": "r1", "pts": 1, "q": "What is \"first-footing\" in Scotland?", "options": ["The first person to enter a home after midnight brings a gift for luck", "The first person to enter a home before midnight brings a gift for luck", "It is the name of the celebration"], "answer": 0, "exp": "La primera persona que entra después de medianoche lleva un regalo, como carbón o pan."}, {"id": 9, "section": "r1", "pts": 1, "q": "Why do Filipinos display round fruits and wear polka dots?", "options": ["Because round shapes represent good luck.", "Because round shapes represent coins and wealth.", "Because they look very good"], "answer": 1, "exp": "Las formas redondas representan monedas y riqueza, según el texto."}, {"id": 10, "section": "r1", "pts": 1, "q": "What unusual custom do Danes practice on New Year's Eve?", "options": ["They smash tomatoes against friends’ doors for good luck.", "They smash eggs against friends’ doors for good luck.", "They throw old plates at friends’ doors for good luck."], "answer": 2, "exp": "La lectura describe platos viejos rotos contra las puertas de amigos y familiares."}, {"id": 11, "section": "r1", "pts": 1, "q": "What common idea do most cultures share about New Year's celebrations?", "options": ["The idea of spending time with family", "The idea of starting fresh and hoping for a better future", "The idea of having good luck in the next year"], "answer": 1, "exp": "El último párrafo menciona empezar de nuevo y esperar un futuro mejor."}, {"id": 12, "section": "r2", "pts": 1, "q": "How long did World War II last?", "options": ["From the end of World War I until 1930", "From 1939 until 1945", "From 1941 until 1949"], "answer": 1, "exp": "La lectura indica 1939–1945."}, {"id": 13, "section": "r2", "pts": 1, "q": "What action directly triggered the outbreak of World War II?", "options": ["Germany’s alliance with Italy", "Japan’s expansion in the Pacific", "Germany’s invasion of Poland"], "answer": 2, "exp": "La invasión de Polonia desencadenó la declaración de guerra descrita."}, {"id": 14, "section": "r2", "pts": 1, "q": "Which statement best describes Adolf Hitler's role in the war?", "options": ["He was the leader of Germany when the war began", "He became Germany’s leader after the war ended", "He was a military general from the Allied Powers"], "answer": 0, "exp": "El primer párrafo describe Alemania bajo el liderazgo de Adolf Hitler."}, {"id": 15, "section": "r2", "pts": 1, "q": "Why did Britain and France declare war on Germany in 1939?", "options": ["To prevent nuclear warfare", "To support Japan’s military campaign", "In response to the invasion of Poland"], "answer": 2, "exp": "La declaración respondió a la invasión de Polonia."}, {"id": 16, "section": "r2", "pts": 1, "q": "What was the main objective of both the Axis and Allied Powers?", "options": ["To expand influence and gain territorial control", "To end colonialism worldwide", "To promote international diplomacy"], "answer": 0, "exp": "Según esta lectura, cada bando buscaba ampliar su influencia y controlar territorios."}, {"id": 17, "section": "r2", "pts": 1, "q": "Which country was NOT mentioned as part of the Axis Powers in the text?", "options": ["Germany", "Italy", "The Soviet Union"], "answer": 2, "exp": "La Unión Soviética aparece entre los Aliados; Alemania e Italia aparecen en el Eje."}, {"id": 18, "section": "r2", "pts": 1, "q": "Which of the following combinations correctly represents the Allied Powers?", "options": ["Germany, Japan, and Italy", "France, Spain, and Portugal", "The United States, the United Kingdom, the Soviet Union, and China"], "answer": 2, "exp": "Es la lista de Aliados que proporciona el segundo párrafo."}, {"id": 19, "section": "r2", "pts": 1, "q": "What does the text suggest about the geographical scope of World War II?", "options": ["It was mainly concentrated in Europe", "It took place across several continents", "It was limited to naval battles"], "answer": 1, "exp": "El texto enumera Europa, África, Asia y el Pacífico."}, {"id": 20, "section": "r2", "pts": 1, "q": "What is meant by describing the Holocaust as “one of the darkest aspects” of the war?", "options": ["It involved secret military operations", "It caused major economic consequences", "It represented extreme human cruelty and genocide"], "answer": 2, "exp": "El párrafo describe asesinatos sistemáticos y genocidio."}, {"id": 21, "section": "r2", "pts": 1, "q": "According to the text, what was the importance of remembering the Holocaust today?", "options": ["To highlight the dangers of hatred and intolerance", "To justify military expansion", "To explain technological progress"], "answer": 0, "exp": "La lectura lo presenta como recordatorio de los peligros del odio y la intolerancia."}, {"id": 22, "section": "r2", "pts": 1, "q": "Which technological development had the greatest long-term impact mentioned in the text?", "options": ["Improvements in naval transport", "The creation and use of nuclear weapons", "The invention of tanks"], "answer": 1, "exp": "Respuesta inferida: las armas nucleares reciben atención especial y se vinculan al final de la guerra. La lectura no afirma explícitamente que su impacto fuera el mayor; no hay clave oficial visible.", "note": "Respuesta inferida; el superlativo no está explícito en la lectura."}, {"id": 23, "section": "r2", "pts": 1, "q": "Why were the bombings of Hiroshima and Nagasaki historically significant?", "options": ["They marked the beginning of the Cold War", "They symbolized the defeat of Germany", "They led directly to Japan’s surrender"], "answer": 2, "exp": "Según la lectura, llevaron a la rendición de Japón."}, {"id": 24, "section": "r2", "pts": 1, "q": "What does the figure of “over 70 million deaths” emphasize?", "options": ["The economic success of the war", "The massive human cost of the conflict", "The length of the war"], "answer": 1, "exp": "La cifra enfatiza el enorme costo humano."}, {"id": 25, "section": "r2", "pts": 1, "q": "What major global changes resulted from World War II?", "options": ["The creation of the United Nations and new political tensions", "The collapse of international organizations", "The complete end of armed conflicts worldwide"], "answer": 0, "exp": "El texto menciona la ONU y el inicio de la Guerra Fría."}, {"id": 26, "section": "g", "pts": 1, "q": "How old is your mom?", "options": ["She is 46 years old", "She has 48 years old", "She have 47 years old"], "answer": 0, "exp": "La edad se expresa con be: She is ... years old."}, {"id": 27, "section": "g", "pts": 1, "q": "There are many _______________ in Guanajuato.", "options": ["museum’s", "museum", "museums"], "answer": 2, "exp": "Many requiere un plural: museums, sin apóstrofe."}, {"id": 28, "section": "g", "pts": 1, "q": "_______________ is my favorite state of this country.", "options": ["Baja California", "San Miguel de Allende", "Cancún"], "answer": 0, "exp": "Baja California es un estado; las otras opciones son ciudades."}, {"id": 29, "section": "g", "pts": 1, "q": "There aren't _______________ students in this classroom.", "options": ["any", "a", "some"], "answer": 0, "exp": "Se usa any con plural en esta oración negativa."}, {"id": 30, "section": "g", "pts": 1, "q": "May I have some water, please?", "options": ["Oh, really?", "Yes, of course!", "Thank you!"], "answer": 1, "exp": "Yes, of course! responde afirmativamente a la petición."}, {"id": 31, "section": "g", "pts": 1, "q": "I often take my umbrella with me in case it _______________.", "options": ["rain", "rains", "shines"], "answer": 1, "exp": "It requiere rains en presente simple."}, {"id": 32, "section": "g", "pts": 1, "q": "I rather read _______________ than a newspaper.", "options": ["a video", "some music", "a digest"], "answer": 2, "exp": "A digest es una publicación que se puede leer. Se conserva el enunciado del video; la forma natural sería I would rather read ..."}, {"id": 33, "section": "g", "pts": 1, "q": "It was a _______________ morning, so I had to slow down on the highway.", "options": ["icy", "foggy", "windy"], "answer": 0, "exp": "Ambigua: icy (con hielo) y foggy (con niebla) justifican reducir la velocidad. Se aceptan ambas; el video muestra una selección, pero no una clave oficial.", "answers": [0, 1], "note": "Ambigua: se aceptan icy y foggy."}, {"id": 34, "section": "g", "pts": 1, "q": "I think that Adele is _______________ Miley.", "options": ["as famous than", "more famous as", "less famous than"], "answer": 2, "exp": "La estructura correcta entre las opciones es less famous than."}, {"id": 35, "section": "g", "pts": 1, "q": "\"Celebration is the common theme in _______________ pictures\"", "options": ["once", "contrast", "both"], "answer": 2, "exp": "Both pictures significa ambas imágenes."}, {"id": 36, "section": "g", "pts": 1, "q": "Where did they _______________ last semester?", "options": ["go", "went", "going"], "answer": 0, "exp": "Después de did, el verbo va en forma base: go."}, {"id": 37, "section": "g", "pts": 1, "q": "He _______________ call a doctor yesterday.", "options": ["wasn’t", "didn’t", "hadn’t"], "answer": 1, "exp": "Pasado simple negativo: didn’t + verbo base (call)."}, {"id": 38, "section": "g", "pts": 1, "q": "Don't touch the hot iron! You will _______________ your hand!", "options": ["scratch", "sprain", "burn"], "answer": 2, "exp": "Una plancha caliente puede quemar: burn."}, {"id": 39, "section": "g", "pts": 1, "q": "If you walk into a hole, you may twist your _______________.", "options": ["elbow", "ankle", "shoulder"], "answer": 1, "exp": "Twist your ankle significa torcerte el tobillo."}, {"id": 40, "section": "g", "pts": 1, "q": "Dr. Mortheson hates _______________ by her maiden name.", "options": ["calling", "having called", "being called"], "answer": 2, "exp": "Being called es el gerundio pasivo: ser llamada."}, {"id": 41, "section": "g", "pts": 1, "q": "Everyone likes _______________ but sometimes we need to work hard _______________ one's trust.", "options": ["to be trusted/to earn", "to trust/with earn", "having trusted/being earned"], "answer": 0, "exp": "To be trusted expresa recibir confianza; to earn expresa el propósito de ganarla."}, {"id": 42, "section": "g", "pts": 1, "q": "He is a very weak president; _______________, a lot of people support him.", "options": ["otherwise", "nevertheless", "instead"], "answer": 1, "exp": "Nevertheless expresa contraste: sin embargo."}, {"id": 43, "section": "g", "pts": 1, "q": "I haven't got _______________ coffee left, I will have _______________ juice.", "options": ["any/some", "some/a little", "some/a cup of"], "answer": 0, "exp": "Any en la negativa y some en la afirmativa."}, {"id": 44, "section": "g", "pts": 1, "q": "The videos _______________ she watches everyday, are not very appropriate for such a young child.", "options": ["who", "that", "which"], "answer": 1, "exp": "That y which pueden referirse a videos en esta cláusula restrictiva; se aceptan ambas. Who se usa para personas. Se conserva la coma y everyday del video, aunque convendría quitar la coma y escribir every day.", "answers": [1, 2], "note": "Ambigua: se aceptan that y which; no hay clave oficial visible."}, {"id": 45, "section": "g", "pts": 1, "q": "You need to work harder; _______________, you'll get fired.", "options": ["moreover", "instead", "otherwise"], "answer": 2, "exp": "Otherwise significa de lo contrario."}];
-const originalReadings = [document.getElementById('reading1Text').innerHTML, document.getElementById('reading2Text').innerHTML];
-const originalPrompts = document.getElementById('promptSelect').innerHTML;
-const videoReadings = ["<h3>\"New Year's Customs Around the World\"</h3>\n<p>New Year's celebrations are among the most widely observed traditions across the globe, but the customs vary greatly from country to country. These differences reflect cultural values, beliefs, and hopes for the coming year.</p>\n<p>In <strong>Spain</strong>, one of the most famous traditions is eating twelve grapes at midnight. Each grape represents good luck for one month of the year. People gather with family and friends, and as the clock strikes twelve, they quickly eat the grapes in rhythm with the chimes.</p>\n<p>In <strong>Japan</strong>, New Year's Day, or <em>Shogatsu</em>, is a time for reflection and renewal. Families clean their homes to welcome good fortune and visit shrines to pray for health and happiness. A popular custom is ringing temple bells 108 times, symbolizing the cleansing of human sins according to Buddhist belief.</p>\n<p>In <strong>Brazil</strong>, many people wear white clothing on New Year's Eve, as white symbolizes peace and purity. Brazilians often go to the beach and jump seven waves, making a wish with each jump. This ritual is believed to bring luck and prosperity.</p>\n<p>In <strong>Scotland</strong>, the celebration known as <em>Hogmanay</em> includes a tradition called “first-footing.” After midnight, the first person to enter a home should bring a gift, such as coal or bread, to ensure warmth and food for the year ahead. Fire festivals and street parties are also common.</p>\n<p>In <strong>the Philippines</strong>, round shapes are considered lucky because they represent coins and wealth. Families display round fruits on the table and wear polka-dotted clothes to attract prosperity. Fireworks and loud noises are used to drive away evil spirits.</p>\n<p>In <strong>Denmark</strong>, people smash old plates against the doors of friends and family. This unusual custom is seen as a sign of affection and good luck. The bigger the pile of broken dishes, the more friends you have.</p>\n<p>Despite these differences, most cultures share the idea of starting fresh and hoping for a better future. Whether through food, clothing, or symbolic acts, these traditions express optimism and the universal desire for happiness and success in the new year.</p>", "<h3>The History of World War II</h3>\n<p>World War II was one of the most significant and devastating conflicts in human history. It lasted from 1939 to 1945 and involved most of the world's nations. The war began when Germany, led by Adolf Hitler, invaded Poland on September 1, 1939. This aggressive move prompted Britain and France to declare war on Germany, marking the official start of the conflict.</p>\n<p>The war was fought between two major alliances: the Axis Powers and the Allied Powers. The Axis included Germany, Italy, and Japan, while the Allies were primarily composed of the United States, the United Kingdom, the Soviet Union, and China. Each side sought to expand its influence and control over territories, leading to battles across Europe, Africa, Asia, and the Pacific.</p>\n<p>One of the darkest aspects of World War II was the Holocaust, in which millions of Jews and other minority groups were systematically murdered by the Nazi regime. This genocide remains one of the most tragic events in history and serves as a reminder of the dangers of hatred and intolerance.</p>\n<p>The war saw significant technological and military advancements, including tanks, aircraft, and naval power. It also introduced nuclear weapons, which were used by the United States against Japan in 1945. The bombings of Hiroshima and Nagasaki led to Japan's surrender, effectively ending the war.</p>\n<p>The consequences of World War II were enormous. Over 70 million people died, and countless cities were destroyed. The war reshaped global politics, leading to the creation of the United Nations and the beginning of the Cold War between the United States and the Soviet Union. It also accelerated movements for independence in colonies around the world.</p>\n<p>World War II remains a critical chapter in history, teaching lessons about the importance of diplomacy, cooperation, and the need to prevent future conflicts.</p>"];
-let questionsData = originalQuestionsData;
-let activeExam = '1';
-const examStates = {};
-function saveExamState() {
-  const answers = {};
-  currentRender.forEach(item => {
-    const checked = document.querySelector(`input[name="q${item.id}"]:checked`);
-    if (checked) answers[item.id] = item.mappedOptions[Number(checked.value)].text;
-  });
-  examStates[activeExam] = {answers, essay: document.getElementById('essayInput').value, prompt: document.getElementById('promptSelect').value, seconds: secondsElapsed, graded: document.getElementById('resultsPanel').style.display === 'block'};
-}
-function switchExam(value) {
-  saveExamState();
-  activeExam = value;
-  questionsData = value === '1' ? originalQuestionsData : videoQuestionsData;
-  const readings = value === '1' ? originalReadings : videoReadings;
-  document.getElementById('reading1Text').innerHTML = readings[0];
-  document.getElementById('reading2Text').innerHTML = readings[1];
-  const titles = document.querySelectorAll('.section-title');
-  titles[0].textContent = 'READING COMPREHENSION #1 (11 Puntos)';
-  titles[1].textContent = 'READING COMPREHENSION #2 (14 Puntos)';
-  document.getElementById('writingInstruction').textContent = `${value === '1' ? 35 : 46}. Write an essay of 200-250 words. Use specific reasons and examples to support your position and make sure that your ideas are well organized.`;
-  document.getElementById('promptSelect').innerHTML = value === '1' ? originalPrompts : `<option value="employment">Artificial intelligence is a threat or a benefit for human employment?</option><option value="education">Should college education be free for everyone?</option><option value="crime">Does the death penalty reduce crime?</option>`;
-  const notice = document.getElementById('sourceNotice');
-  notice.hidden = value === '1';
-  notice.innerHTML = `<strong>Contenido transcrito del video</strong><p>45 preguntas y dos lecturas legibles. Las respuestas se deducen de la lectura o la gramática; las selecciones de la persona del video no son una clave oficial. Las preguntas 22, 33 y 44 incluyen notas de inferencia o ambigüedad.</p><p>Se conserva la puntuación y la fórmula del simulador: 45 objetivos + 28 de Writing = 73. El video asigna 25 al Writing (70 puntos académicos); los campos 47–49 son nombre, NUA y correo, no ejercicios, y se omiten aquí. El Writing es una estimación por extensión, párrafos y conectores, no una evaluación completa de gramática o contenido.</p>`;
-  initQuiz(false);
-  const state = examStates[value];
-  document.getElementById('essayInput').value = state ? state.essay : '';
-  if (state) {
-    document.getElementById('promptSelect').value = state.prompt;
-    secondsElapsed = state.seconds;
-    currentRender.forEach(item => {
-      const idx = item.mappedOptions.findIndex(opt => opt.text === state.answers[item.id]);
-      if (idx >= 0) document.querySelector(`input[name="q${item.id}"][value="${idx}"]`).checked = true;
-    });
-    if (state.graded) gradeExam();
-  }
-  renderTimer();
-  updateWordCount();
-}
-function renderTimer() {
-  document.getElementById('timerDisplay').textContent = `⏱️ Tiempo: ${String(Math.floor(secondsElapsed / 60)).padStart(2,'0')}:${String(secondsElapsed % 60).padStart(2,'0')}`;
-}
-
 let secondsElapsed = 0;
 let timerInterval;
 let currentRender = [];
@@ -355,7 +301,6 @@ let currentRender = [];
 function startTimer() {
   clearInterval(timerInterval);
   secondsElapsed = 0;
-  renderTimer();
   timerInterval = setInterval(() => {
     secondsElapsed++;
     const m = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
@@ -375,7 +320,7 @@ function initQuiz(shuffleOptions = false) {
   gContainer.innerHTML = '';
 
   currentRender = questionsData.map(item => {
-    let mappedOptions = item.options.map((text, idx) => ({ text, isCorrect: (item.answers || [item.answer]).includes(idx) }));
+    let mappedOptions = item.options.map((text, idx) => ({ text, isCorrect: idx === item.answer }));
     if (shuffleOptions && item.options.length > 2) {
       mappedOptions.sort(() => Math.random() - 0.5);
     }
@@ -402,7 +347,6 @@ function initQuiz(shuffleOptions = false) {
         <span>${item.id}. ${item.q}</span>
         <span class="pts-badge">${item.pts} ${item.pts === 1 ? 'pt' : 'pts'}</span>
       </div>
-      ${item.note ? `<p style="color:#92400e">⚠️ ${item.note}</p>` : ''}
       <div class="options">${optsHtml}</div>
       <div class="explanation" id="exp-${item.id}">💡 <strong>Explicación:</strong> ${item.exp}</div>
     `;
@@ -434,7 +378,7 @@ function updateWordCount() {
   document.getElementById('connectorCountText').textContent = `Conectores académicos detectados: ${found}`;
 }
 
-function copyExactWriting(btn) {
+function copyExactWriting() {
   const exactText = `Today, artificial intelligence is very popular in schools and companies around the world. Many people think artificial intelligence is bad because students can simply copy their homework without learning anything, but I think that is not the real problem. And this is where ethics is important. Artificial intelligence is a very good and useful tool if we use it in the correct way. Because it can help us save a lot of time and improve our work or studies.
 
 First of all, it can help students understand things faster and workers solve problems in an easier way. For example, I use technology to practice English, and in fact, I work with a digital tool at General Motors and this helps me save time, organize data and reduce mistakes.
@@ -443,32 +387,14 @@ Also, another problem is that if we don't check the information that AI gives us
 
 Finally, I think that if we use artificial intelligence in a good way, checking the information and always reading what it gives us, it can be very useful. As a result, I think AI can be a very good tool that will always help us improve our work and our processes, both at school and at work.`;
 
-  const status = document.getElementById('copyStatus');
-  const copied = () => {
+  navigator.clipboard.writeText(exactText).then(() => {
+    const btn = event.target;
     const originalText = btn.textContent;
     btn.textContent = "✅ ¡Copiado!";
-    status.textContent = 'Tu Writing original se copió completo.';
     setTimeout(() => { btn.textContent = originalText; }, 1500);
-  };
-  const fallback = () => {
-    const area = document.createElement('textarea');
-    area.value = exactText;
-    area.style.position = 'fixed'; area.style.left = '-9999px';
-    document.body.appendChild(area); area.select();
-    let ok = false;
-    try { ok = document.execCommand('copy'); } catch (_) {}
-    area.remove();
-    if (ok) copied();
-    else {
-      status.textContent = 'El navegador bloqueó la copia automática. Selecciona y copia tu Writing aquí:';
-      const manual = document.createElement('textarea');
-      manual.value = exactText; manual.readOnly = true;
-      manual.setAttribute('aria-label', 'Writing original para copiar');
-      status.appendChild(manual); manual.focus(); manual.select();
-    }
-  };
-  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(exactText).then(copied).catch(fallback);
-  else fallback();
+  }).catch(err => {
+    console.error('Error al copiar: ', err);
+  });
 }
 
 function gradeExam() {
@@ -485,7 +411,6 @@ function gradeExam() {
       const lbl = document.getElementById(`lbl-${item.id}-${idx}`);
       lbl.style.background = 'transparent';
       lbl.style.borderColor = 'transparent';
-      lbl.style.fontWeight = 'normal';
       if (opt.isCorrect) {
         lbl.style.background = 'var(--correct)';
         lbl.style.borderColor = 'var(--correct-border)';
@@ -562,7 +487,7 @@ function gradeExam() {
   const panel = document.getElementById('resultsPanel');
   panel.style.display = 'block';
   panel.innerHTML = `
-    <h2 style="margin-top:0; color: var(--ug-blue);">📊 Resultado de tu Simulacro — Examen ${activeExam}</h2>
+    <h2 style="margin-top:0; color: var(--ug-blue);">📊 Resultado de tu Simulacro</h2>
     <p><strong>Reading + Grammar:</strong> ${objectiveScore} / ${maxObjective} puntos</p>
     <p><strong>Writing (Estimado):</strong> ${writingScore} / 28 puntos</p>
     <hr>
