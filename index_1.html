@@ -75,7 +75,6 @@
     }
     button:hover { opacity: 0.9; }
     button.secondary { background-color: #4b5563; }
-    button.quick-copy { background-color: #16a34a; }
     .section-title {
       background: var(--ug-blue);
       color: white;
@@ -183,8 +182,7 @@
 
   <div class="toolbar">
     <div class="timer" id="timerDisplay">⏱️ Tiempo: 00:00</div>
-    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-      <button class="quick-copy" onclick="copyExactWriting()">📋 writing</button>
+    <div>
       <button class="secondary" onclick="initQuiz(true)">🔀 Mezclar Incisos y Reiniciar</button>
     </div>
   </div>
@@ -378,25 +376,6 @@ function updateWordCount() {
   document.getElementById('connectorCountText').textContent = `Conectores académicos detectados: ${found}`;
 }
 
-function copyExactWriting() {
-  const exactText = `Today, artificial intelligence is very popular in schools and companies around the world. Many people think artificial intelligence is bad because students can simply copy their homework without learning anything, but I think that is not the real problem. And this is where ethics is important. Artificial intelligence is a very good and useful tool if we use it in the correct way. Because it can help us save a lot of time and improve our work or studies.
-
-First of all, it can help students understand things faster and workers solve problems in an easier way. For example, I use technology to practice English, and in fact, I work with a digital tool at General Motors and this helps me save time, organize data and reduce mistakes.
-
-Also, another problem is that if we don't check the information that AI gives us and we just use it, this is when we can have problems. And for this reason, it can cause problems for students and workers in different companies.
-
-Finally, I think that if we use artificial intelligence in a good way, checking the information and always reading what it gives us, it can be very useful. As a result, I think AI can be a very good tool that will always help us improve our work and our processes, both at school and at work.`;
-
-  navigator.clipboard.writeText(exactText).then(() => {
-    const btn = event.target;
-    const originalText = btn.textContent;
-    btn.textContent = "✅ ¡Copiado!";
-    setTimeout(() => { btn.textContent = originalText; }, 1500);
-  }).catch(err => {
-    console.error('Error al copiar: ', err);
-  });
-}
-
 function gradeExam() {
   clearInterval(timerInterval);
   let objectiveScore = 0;
@@ -500,4 +479,4 @@ function gradeExam() {
 window.onload = () => initQuiz(false);
 </script>
 </body>
-</html>
+</html> 
